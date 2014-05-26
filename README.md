@@ -144,8 +144,8 @@ sudo chown -R named:named /srv/bind
 cp bind/named.conf /srv/bind/etc
 ```
 
-Additional zone files copy to `/srv/bind/etc`.
-Configuration i reloaded hourly as set in [timer-hourly.timer](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/bind/timer-hourly.timer) using [rndc-reload.service](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/bind/rndc-reload.service).
+Zonefiles and rest of the configs copy to `/srv/bind/etc`.
+Configuration is reloaded hourly as set in [timer-hourly.timer](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/bind/timer-hourly.timer) using [rndc-reload.service](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/bind/rndc-reload.service).
 
 ### Build:
 
@@ -157,7 +157,7 @@ sudo docker build --rm=true -t <username>/bind .
 ### Run:
 
 ```
-sudo docker run --privileged=true -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /srv/bind/etc:/etc/named:rw -v /srv/bind/log:/var/log/named:rw -p 127.0.0.1:53:53/udp -p 127.0.0.1:53:53/tcp <username>/bind
+sudo docker run --privileged=true -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /srv/bind/etc:/etc/named:rw -v /srv/bind/log:/var/log/named:rw --dns=127.0.0.1 -p 127.0.0.1:53:53/udp -p 127.0.0.1:53:53/tcp <username>/bind
 ```
 
 ### Test:
