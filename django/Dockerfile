@@ -15,5 +15,17 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
+RUN yum -y install python-pip; \
+pip install django gunicorn; \
+cd /srv; django-admin.py startproject djdocker; \
+useradd djdocker; \
+chown -R djdocker:djdocker /srv/djdocker;
+
+ADD djdocker.service /etc/systemd/system/djdocker.service
+
+RUN systemctl enable djdocker.service;
+
+EXPOSE 8000
+
 VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/sbin/init"]

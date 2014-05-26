@@ -1,0 +1,16 @@
+[Unit]
+Description=djdocker - gunicorn daemon
+
+[Service]
+Type=forking
+PIDFile=/srv/djdocker/djdocker.pid
+User=djdocker
+Group=djdocker
+WorkingDirectory=/srv/djdocker
+ExecStart=/usr/bin/gunicorn -D -b 0.0.0.0:8000 -p /srv/djdocker/djdocker.pid djdocker.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
