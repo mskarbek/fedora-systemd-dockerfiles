@@ -15,19 +15,10 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-RUN yum -y install openssh-server; yum clean all; \
-systemctl enable sshd.service; \
-useradd -G wheel user;
+RUN yum -y install nginx; yum clean all; \
+systemctl enable nginx.service;
 
-ADD authorized_keys /home/user/.ssh/authorized_keys
-ADD sudoers /etc/sudoers
-ADD sshd /etc/pam.d/sshd
-
-RUN chown -R user:user /home/user/.ssh; \
-chmod 700 /home/user/.ssh; \
-chmod 600 /home/user/.ssh/authorized_keys;
-
-EXPOSE 22
+EXPOSE 80
 
 VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/sbin/init"]

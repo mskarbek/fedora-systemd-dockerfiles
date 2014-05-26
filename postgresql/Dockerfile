@@ -15,19 +15,21 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-RUN yum -y install openssh-server; yum clean all; \
-systemctl enable sshd.service; \
-useradd -G wheel user;
+RUN yum -y install postgresql-server postgresql-contrib; yum clean all; \
+systemctl enable postgresql.service; \
+su - postgres -c 'pg_ctl initdb'; \
+su - postgres -c '/usr/bin/pg_ctl -D /var/lib/pgsql/data start' && sleep 10; \
+su - postgres -c 'createuser dockeruser'; \
+su - postgres -c 'createdb dockerdb'; \
+su - postgres -c "psql -c \"ALTER ROLE dockeruser WITH PASSWORD 'password';\""; \
+su - postgres -c '/usr/bin/pg_ctl -D /var/lib/pgsql/data stop';
 
-ADD authorized_keys /home/user/.ssh/authorized_keys
-ADD sudoers /etc/sudoers
-ADD sshd /etc/pam.d/sshd
+ADD pg_hba.conf /var/lib/pgsql/data/pg_hba.conf
+ADD postgresql.conf /var/lib/pgsql/data/postgresql.conf
 
-RUN chown -R user:user /home/user/.ssh; \
-chmod 700 /home/user/.ssh; \
-chmod 600 /home/user/.ssh/authorized_keys;
+RUN chown postgres:postgres /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/postgresql.conf;
 
-EXPOSE 22
+EXPOSE 5432
 
 VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/sbin/init"]
