@@ -15,5 +15,25 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-VOLUME ["/sys/fs/cgroup"]
+RUN yum -y install bind bind-utils; yum clean all; \
+systemctl enable named.service; \
+rndc-confgen -a -c /etc/rndc.key; \
+chown named:named /etc/rndc.key;
+
+ADD timer-hourly.timer /etc/systemd/system/timer-hourly.timer
+ADD timer-hourly.target /etc/systemd/system/timer-hourly.target
+ADD rndc-reload.service /etc/systemd/system/rndc-reload.service
+ADD named.conf /etc/named/named.conf
+
+RUN mkdir /etc/systemd/system/timer-hourly.target.wants; \
+systemctl enable timer-hourly.timer; \
+systemctl enable rndc-reload.service; \
+rm -f /etc/named.conf; \
+ln -s /etc/named/named.conf /etc/named.conf; \
+mkdir /var/log/named; \
+chown named:named /var/log/named;
+
+EXPOSE 53
+
+VOLUME ["/sys/fs/cgroup", "/etc/named", "/var/log/named"]
 CMD ["/usr/sbin/init"]

@@ -1,0 +1,12 @@
+[Unit]
+Description=rndc reload
+
+[Service]
+Nice=19
+IOSchedulingClass=2
+IOSchedulingPriority=7
+Type=oneshot
+ExecStart=/usr/sbin/rndc reload
+
+[Install]
+WantedBy=timer-hourly.target

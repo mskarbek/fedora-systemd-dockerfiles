@@ -25,7 +25,7 @@ sudo docker run --privileged=true -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro <userna
 
 ## openssh-server
 
-Image with one user: `user` added to group `wheel`. Sudo configured with NOPASSWD for `wheel` group.
+Image with one user `user` added to group `wheel`. Sudo configured with NOPASSWD for `wheel` group.
 No password for user set.
 
 ### Configure:
@@ -100,6 +100,8 @@ curl localhost:<port>
 
 ## postgresql
 
+PostgreSQL configured with one user `dockeruser`, password `password` and database `dockerdb`.
+
 ### Configure:
 
 If you need custom user/database name and/or password edit lines 22-24 in [openssh-server/Dockerfile](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/postgresql/Dockerfile#L22-L24).
@@ -133,11 +135,36 @@ psql -h localhost -p <port> -U dockeruser dockerdb
 
 ## bind
 
+
 ### Configure:
+
+```
+sudo mkdir -p /srv/bind/{etc,log}
+sudo chown -R named:named /srv/bind
+cp bind/named.conf /srv/bind/etc
+```
+
+Additional zone files copy to `/srv/bind/etc`.
+Configuration i reloaded hourly as set in [timer-hourly.timer](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/bind/timer-hourly.timer) using [rndc-reload.service](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/bind/rndc-reload.service).
 
 ### Build:
 
+```
+cd bind
+sudo docker build --rm=true -t <username>/bind .
+```
+
 ### Run:
+
+```
+sudo docker run --privileged=true -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /srv/bind/etc:/etc/named:rw -v /srv/bind/log:/var/log/named:rw -p 127.0.0.1:53:53/udp -p 127.0.0.1:53:53/tcp <username>/bind
+```
+
+### Test:
+
+```
+dig google.com @localhost
+```
 
 ## redis
 
