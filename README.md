@@ -51,7 +51,7 @@ For random port binding:
 sudo docker run --privileged=true -d -P -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/openssh-server
 ```
 
-For desired port binding:
+For specific port binding:
 
 ```
 sudo docker run --privileged=true -d -p <port>:22 -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/openssh-server
@@ -65,7 +65,11 @@ ssh -p <port> user@localhost
 
 ## nginx
 
+Basic nginx image.
+
 ### Configure:
+
+No extra configuration needed.
 
 ### Build:
 
@@ -82,7 +86,7 @@ For random port binding:
 sudo docker run --privileged=true -d -P -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/nginx
 ```
 
-For desired port binding:
+For specific port binding:
 
 ```
 sudo docker run --privileged=true -d -p <port>:80 -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/nginx
@@ -98,6 +102,8 @@ curl localhost:<port>
 
 ### Configure:
 
+If you need custom user/database name and/or password edit lines 22-24 in [openssh-server/Dockerfile](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/postgresql/Dockerfile#L22-L24).
+
 ### Build:
 
 ```
@@ -107,8 +113,22 @@ sudo docker build --rm=true -t <username>/postgresql .
 
 ### Run:
 
+For random port binding:
+
 ```
 sudo docker run --privileged=true -d -P -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/postgresql
+```
+
+For specific port binding:
+
+```
+sudo docker run --privileged=true -d -p <port>:5432 -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/postgresql
+```
+
+### Test:
+
+```
+psql -h localhost -p <port> -U dockeruser dockerdb
 ```
 
 ## bind
@@ -121,22 +141,51 @@ sudo docker run --privileged=true -d -P -v /sys/fs/cgroup:/sys/fs/cgroup:ro <use
 
 ## redis
 
+Basic redis image.
+
 ### Configure:
 
 No extra configuration needed.
 
 ### Build:
 
+```
+cd redis
+sudo docker build --rm=true -t <username>/redis .
+```
+
 ### Run:
+
+For random port binding:
+
+```
+sudo docker run --privileged=true -d -P -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/redis
+```
+
+For specific port binding:
+
+```
+sudo docker run --privileged=true -d -p <port>:6379 -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/redis
+```
+
+### Test:
+
+```
+nc localhost <port>
+```
 
 ## django
 
+Basic django image. Gunicorn as a server.
+
 ### Configure:
+
+No extra configuration needed.
 
 ### Build:
 
 ```
-cd postgresql
+cd django
 sudo docker build --rm=true -t <username>/django .
 ```
 
@@ -148,7 +197,7 @@ For random port binding:
 sudo docker run --privileged=true -d -P -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/django
 ```
 
-For desired port binding:
+For specific port binding:
 
 ```
 sudo docker run --privileged=true -d -p <port>:8000 -v /sys/fs/cgroup:/sys/fs/cgroup:ro <username>/django
@@ -167,4 +216,3 @@ curl localhost:<port>
 ### Build:
 
 ### Run:
-
