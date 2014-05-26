@@ -1,4 +1,18 @@
-fedora-systemd-dockerfiles
-==========================
+Systemd based Dockerfiles for Fedora
+====================================
 
-systemd based dockerfiles for fedora
+systemd
+
+openssh-server
+
+nginx
+
+postgresql
+
+bind
+
+redis
+
+django
+
+docker-repository
