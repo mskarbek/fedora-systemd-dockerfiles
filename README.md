@@ -104,7 +104,7 @@ PostgreSQL configured with one user `dockeruser`, password `password` and databa
 
 ### Configure:
 
-If you need custom user/database name and/or password edit lines 22-24 in [openssh-server/Dockerfile](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/postgresql/Dockerfile#L22-L24).
+If you need custom user/database name and/or password edit lines 22-24 in [postgresql/Dockerfile](https://github.com/mskarbek/fedora-systemd-dockerfiles/blob/master/postgresql/Dockerfile#L22-L24).
 
 ### Build:
 
