@@ -1,18 +1,26 @@
 Systemd based Dockerfiles for Fedora
 ====================================
 
-systemd
+## systemd
 
-openssh-server
+Basic Dockerfile providing only working systemd, all other Dockerfiles in this repo are based on it.
 
-nginx
+## openssh-server
 
-postgresql
+To build image you need to add public ssh key to `openssh-server/authorized_keys`:
 
-bind
+```
+cp ~/.ssh/id_rsa.pub openssh-server/authorized_keys
+```
 
-redis
+## nginx
 
-django
+## postgresql
 
-docker-repository
+## bind
+
+## redis
+
+## django
+
+## docker-repository

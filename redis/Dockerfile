@@ -15,5 +15,10 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*; \
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
+RUN yum -y install redis; yum clean all; \
+systemctl enable redis.service;
+
+EXPOSE 6379
+
 VOLUME ["/sys/fs/cgroup"]
 CMD ["/usr/sbin/init"]
