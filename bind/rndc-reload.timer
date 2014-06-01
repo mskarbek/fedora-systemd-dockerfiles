@@ -1,0 +1,10 @@
+[Unit]
+Description=rndc-reload timer
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=5min
+Unit=rndc-reload.service
+
+[Install]
+WantedBy=multi-user.target

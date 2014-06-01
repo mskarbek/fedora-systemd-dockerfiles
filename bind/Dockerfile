@@ -20,14 +20,13 @@ systemctl enable named.service; \
 rndc-confgen -a -c /etc/rndc.key; \
 chown named:named /etc/rndc.key;
 
-ADD timer-hourly.timer /etc/systemd/system/timer-hourly.timer
-ADD timer-hourly.target /etc/systemd/system/timer-hourly.target
+ADD rndc-reload.timer /etc/systemd/system/rndc-reload.timer
 ADD rndc-reload.service /etc/systemd/system/rndc-reload.service
+ADD rndc-reload /usr/local/bin/rndc-reload
 ADD named.conf /etc/named/named.conf
 
 RUN mkdir /etc/systemd/system/timer-hourly.target.wants; \
-systemctl enable timer-hourly.timer; \
-systemctl enable rndc-reload.service; \
+systemctl enable rndc-reload.timer; \
 rm -f /etc/named.conf; \
 ln -s /etc/named/named.conf /etc/named.conf; \
 mkdir /var/log/named; \
