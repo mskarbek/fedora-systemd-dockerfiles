@@ -25,8 +25,7 @@ ADD rndc-reload.service /etc/systemd/system/rndc-reload.service
 ADD rndc-reload /usr/local/bin/rndc-reload
 ADD named.conf /etc/named/named.conf
 
-RUN mkdir /etc/systemd/system/timer-hourly.target.wants; \
-systemctl enable rndc-reload.timer; \
+RUN systemctl enable rndc-reload.timer; \
 rm -f /etc/named.conf; \
 ln -s /etc/named/named.conf /etc/named.conf; \
 mkdir /var/log/named; \

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-if [-f /etc/named/reload]
+if [ -f /etc/named/reload ]
 then
-  /usr/sbin/rndc reload
-  rm -f /etc/named/reload
+  /usr/sbin/rndc reload && rm -f /etc/named/reload
 fi
